@@ -23,6 +23,6 @@ jobs:
         run: poetry install --no-dev
 
       - name: Run python script
-        run: python main.py
+        run: python dbt_faker/main.py
 
       - uses: actions/checkout@v2
