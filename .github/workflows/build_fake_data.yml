@@ -24,5 +24,7 @@ jobs:
 
       - name: Run python script
         run: poetry run python dbt_faker/main.py
+        env:
+          WAREHOUSE_URL: ${{ secrets.WAREHOUSE_URL }}
 
       - uses: actions/checkout@v2
