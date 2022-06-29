@@ -24,27 +24,27 @@ def productize_lists(*ls, sep: str = ' '):
 
 
 def get_nation_records():
-    return _get_current_records(tpch.Nation, 'n_nationkey')
+    return _get_current_records(tpch.Nation, 'n_nationkey', 100)
 
 
 def get_region_records():
-    return _get_current_records(tpch.Region, 'r_regionkey')
+    return _get_current_records(tpch.Region, 'r_regionkey', 100)
 
 
 def get_supplier_records():
-    return _get_current_records(tpch.Supplier, 's_suppkey')
+    return _get_current_records(tpch.Supplier, 's_suppkey', 100)
 
 
 def get_customer_records():
-    return _get_current_records(tpch.Customer, 'c_custkey')
+    return _get_current_records(tpch.Customer, 'c_custkey', 25)
 
 
 def get_part_records():
-    return _get_current_records(tpch.Part, 'p_partkey')
+    return _get_current_records(tpch.Part, 'p_partkey', 10)
 
 
 def get_order_records():
-    return _get_current_records(tpch.Order, 'o_orderkey')
+    return _get_current_records(tpch.Order, 'o_orderkey', 10)
 
 
 # Part
@@ -221,8 +221,9 @@ class PartSuppFactory(dbtFactory):
     class Meta:
         model = tpch.PartSupp
         sqlalchemy_session = Session
-        
-    ps_partkey = factory.Sequence(lambda n: n)
+    
+    ps_partsuppkey = factory.Sequence(lambda n: n)
+    ps_partkey = RandomLazyFunction(get_part_records)
     ps_suppkey = RandomLazyFunction(get_supplier_records)
     ps_availqty = factory.Faker('random_int', min=1, max=10000)
     ps_supplycost = factory.Faker('random_int', min=1, max=1000)
@@ -246,7 +247,7 @@ class OrderFactory(dbtFactory):
     )
     o_clerk = factory.Faker('random_element', elements=O_CLERK_ELEMENTS)
     o_comment = factory.Faker('bs')
-    
+
     
 class LineItemFactory(dbtFactory):
     class Meta:
@@ -257,7 +258,7 @@ class LineItemFactory(dbtFactory):
     l_orderkey = RandomLazyFunction(get_order_records)
     l_partkey = RandomLazyFunction(get_part_records)
     l_suppkey = RandomLazyFunction(get_supplier_records)
-    l_linenumber = factory.Faker('random_int', min=1, max=5)
+    l_linenumber = factory.Sequence(lambda n: n)
     l_quantity = factory.Faker('random_int', min=1, max=50)
     l_extendedprice = factory.Faker('random_int', min=1000, max=100000)
     l_returnflag = factory.Faker('random_element', elements=L_RETURNFLAG_ELEMENTS)
