@@ -12,7 +12,7 @@ from dbt_faker.db.base import get_session, get_warehouse_engine
 
 
 @cache
-def _get_current_records(model, primary_key, sample='100 rows'):
+def _get_current_records(model, primary_key, sample):
     schema = model.__table_args__['schema']
     table = model.__tablename__
     engine = get_warehouse_engine()
