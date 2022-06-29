@@ -100,8 +100,11 @@ class Part(WarehouseBase, TpchSchemaMixin):
     
 class PartSupp(WarehouseBase, TpchSchemaMixin):
     __tablename__ = 'partsupp'
-    ps_partkey = sa.Column(sa.Integer, primary_key=True)
+    ps_partsuppkey = sa.Column(sa.Integer, primary_key=True)
     
+    ps_partkey = sa.Column(
+        sa.Integer, sa.ForeignKey('Part.p_partkey'), nullable=False
+    )
     ps_suppkey = sa.Column(
         sa.Integer, sa.ForeignKey('Supplier.s_suppkey'), nullable=False
     )
