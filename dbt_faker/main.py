@@ -1,4 +1,5 @@
 # stdlib
+import logging
 import random
 
 # third party
@@ -10,6 +11,9 @@ from dbt_faker.db.base import get_warehouse_engine
 from dbt_faker.etl.common import dataframe_to_sql, get_ids_to_update
 from dbt_faker.etl import tpch_etl
 from dbt_faker.factories.common import factory_to_dict
+
+
+logging.basicConfig(format='%(name)s - %(levelname)s - %(asctime)s - %(message)s', level=logging.INFO)
 
 # Set defaults
 DEFAULT_UPDATE_CADENCE = .15
@@ -29,6 +33,8 @@ if __name__ == '__main__':
         source_schema = etl_source['schema']
         total_rows = random.randint(*etl_source['rows'])
         
+        logging.info(f'{source_schema} ETL is beginning.')
+        
         # Loop through each orm/factory in config
         for orm_config in etl_source['config']:
             source_table = sa.Table(
@@ -36,6 +42,8 @@ if __name__ == '__main__':
                 sa.MetaData(schema=source_schema, bind=source_engine),
                 *(col._copy() for col in orm_config['orm'].__table__.c),
             )
+            
+            logging.info(f'Fake data generation for {source_schema}.{source_table.name} table beginning.')
             
             # Initialize factory
             factory = orm_config['factory']
@@ -77,6 +85,8 @@ if __name__ == '__main__':
                             source_table.name,
                             source_schema,
                         )
+                        
+                    logging.info(f'{source_schema}.{source_table.name} table has been updated with {len(ids)} rows.')
                 
             # Create some new data
             new_rows = int(round(total_rows * orm_config['perc_of_total_rows'], 0))
@@ -84,3 +94,6 @@ if __name__ == '__main__':
                 data = factory_to_dict(factory, new_rows)
                 df = pd.DataFrame(data)
                 dataframe_to_sql(df, source_engine, source_table.name, source_schema)
+                logging.info(f'{source_schema}.{source_table.name} table has {len(df)} new rows.')
+
+    logging.info('Fake data generated!')
