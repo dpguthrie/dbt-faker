@@ -84,6 +84,7 @@ if __name__ == '__main__':
                             source_engine,
                             source_table.name,
                             source_schema,
+                            unique_subset=orm_config.get('unique_subset', None),
                         )
                         
                     logging.info(f'{source_schema}.{source_table.name} table has been updated with {len(ids)} rows.')
@@ -93,7 +94,13 @@ if __name__ == '__main__':
             if new_rows:
                 data = factory_to_dict(factory, new_rows)
                 df = pd.DataFrame(data)
-                dataframe_to_sql(df, source_engine, source_table.name, source_schema)
+                dataframe_to_sql(
+                    df,
+                    source_engine, 
+                    source_table.name, 
+                    source_schema,
+                    unique_subset=orm_config.get('unique_subset', None)
+                )
                 logging.info(f'{source_schema}.{source_table.name} table has {len(df)} new rows.')
 
     logging.info('Fake data generated!')

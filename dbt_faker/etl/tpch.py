@@ -32,6 +32,7 @@ tpch_etl = {
             'factory': tpch_factories.PartSuppFactory,
             'perc_of_total_rows': .15,
             'orm': tpch_orms.PartSupp,
+            'unique_subset': ['ps_partkey', 'ps_suppkey'],
         },
         {
             'factory': tpch_factories.OrderFactory,

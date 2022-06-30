@@ -1,7 +1,7 @@
 # stdlib
 import datetime
 import random
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 
 # third party
 import pandas as pd
@@ -50,7 +50,9 @@ def dataframe_to_sql(
     if_exists: str = 'append',
     index: bool = False,
     chunksize: int = 16000,
+    unique_subset: List[str] = None,
 ):
+    df = df.drop_duplicates(subset=unique_subset)
     df.to_sql(
         table,
         engine,
