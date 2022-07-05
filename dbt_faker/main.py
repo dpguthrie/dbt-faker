@@ -65,27 +65,35 @@ if __name__ == '__main__':
                     DEFAULT_ROWS_TO_UPDATE
                 )
                 
-                # Create fake data, put into dataframe, reassign to IDs to update
+                # Update existing rows with predefined set of columns
                 if len(ids) > 0:
                     data = factory_to_dict(factory, len(ids))
                     update_df = pd.DataFrame(data)
                     update_df[primary_key] = ids
-                    
-                    # Delete old records and insert new ones
-                    delete_stmt = sa.delete(source_table).filter(
-                        getattr(source_table.c, primary_key).in_(ids)
-                    )
-                    values = update_df.to_dict(orient='records')
-                    insert_stmt = source_table.insert().values(values)
+                    update_cols = orm_config.get('update_cols', [
+                        col for col in update_df.columns if col != primary_key
+                    ])
                     with source_engine.begin() as conn:
-                        conn.execute(delete_stmt)
+                        
+                        # Insert raw data into temp table
                         dataframe_to_sql(
                             update_df,
                             source_engine,
-                            source_table.name,
+                            'temp_update_tbl',
                             source_schema,
-                            unique_subset=orm_config.get('unique_subset', None),
+                            if_exists='replace',
+                            unique_subset=orm_config.get('unique_subset', None)
                         )
+                        
+                        # Create update statment
+                        update_sql = f'''
+                        update {source_schema}.{source_table.name} as s
+                        set {', '.join([f's.{col} = t.{col}' for col in update_cols])}
+                        from temp_update_tbl as t
+                        where s.{primary_key} = t.{primary_key};
+                        '''
+                        conn.execute(update_sql)
+                        conn.execute(f'drop table {source_schema}.{source_table.name};')
                         
                     logging.info(f'{source_schema}.{source_table.name} table has been updated with {len(ids)} rows.')
                 
