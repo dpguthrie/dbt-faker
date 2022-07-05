@@ -93,7 +93,7 @@ if __name__ == '__main__':
                         where s.{primary_key} = t.{primary_key};
                         '''
                         conn.execute(update_sql)
-                        conn.execute(f'drop table {source_schema}.{source_table.name};')
+                        conn.execute(f'drop table {source_schema}.temp_update_tbl;')
                         
                     logging.info(f'{source_schema}.{source_table.name} table has been updated with {len(ids)} rows.')
                 
