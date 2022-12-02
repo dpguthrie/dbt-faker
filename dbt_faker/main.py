@@ -113,7 +113,7 @@ if __name__ == '__main__':
 
         if 'post_sql' in etl_source.keys():
             with source_engine.begin() as conn:
-                for sql_statement in etl_source['post_sql']
+                for sql_statement in etl_source['post_sql']:
                     conn.execute(sql_statement)
             logging.info('post_sql executed')
     
