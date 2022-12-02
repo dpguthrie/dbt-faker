@@ -54,4 +54,22 @@ tpch_etl = {
     ],
     'rows': (500, 1000),
     'schema': 'TPCH',
+    'post_sql': [
+        '''
+        delete from doug_demo_v2.tpch.partsupp
+        where ps_partsuppkey in (
+            select ps_partsuppkey
+            from (
+                select
+                    ps_partsuppkey
+                    , row_number() over (
+                        partition by ps_partkey, ps_suppkey
+                        order by ps_partsuppkey
+                    ) as rn
+                from doug_demo_v2.tpch.partsupp
+            )
+            where rn > 1
+        );
+        '''
+    ]
 }
