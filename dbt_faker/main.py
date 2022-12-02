@@ -89,7 +89,7 @@ if __name__ == '__main__':
                         update_sql = f'''
                         update {source_schema}.{source_table.name} as s
                         set {', '.join([f's.{col} = t.{col}' for col in update_cols])}
-                        from temp_update_tbl as t
+                        from {source_schema}.temp_update_tbl as t
                         where s.{primary_key} = t.{primary_key};
                         '''
                         conn.execute(update_sql)
@@ -111,4 +111,7 @@ if __name__ == '__main__':
                 )
                 logging.info(f'{source_schema}.{source_table.name} table has {len(df)} new rows.')
 
+        if 'post_sql' in etl_source.keys():
+            conn.execute(etl_source['post_sql'])
+    
     logging.info('Fake data generated!')
