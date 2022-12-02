@@ -73,6 +73,9 @@ if __name__ == '__main__':
                     update_cols = orm_config.get('update_cols', [
                         col for col in update_df.columns if col != primary_key
                     ])
+                    
+                    # Ensure that the timestamp is updated as well on the record
+                    update_cols.append('_etl_updated_timestamp')
                     with source_engine.begin() as conn:
                         
                         # Insert raw data into temp table
