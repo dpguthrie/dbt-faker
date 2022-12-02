@@ -112,6 +112,8 @@ if __name__ == '__main__':
                 logging.info(f'{source_schema}.{source_table.name} table has {len(df)} new rows.')
 
         if 'post_sql' in etl_source.keys():
-            conn.execute(etl_source['post_sql'])
+            with source_engine.begin() as conn:
+                conn.execute(etl_source['post_sql'])
+            logging.info('post_sql executed')
     
     logging.info('Fake data generated!')
