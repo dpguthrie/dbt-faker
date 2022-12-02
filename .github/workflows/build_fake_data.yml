@@ -1,8 +1,8 @@
 name: Build Fake Data
 on:
   workflow_dispatch:
-#   schedule:
-#     - cron: "52 23 * * *"
+  schedule:
+    - cron: "52 23 * * *"
 
 jobs:
   build_fake_data:
