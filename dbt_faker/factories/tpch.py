@@ -198,6 +198,7 @@ class CustomerFactory(dbtFactory):
         ],
     )
     c_comment = factory.Faker('bs')
+    user_id = factory.Faker('pyint', min_value=2, max_value=11)
 
     
     
