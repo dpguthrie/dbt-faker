@@ -31,6 +31,7 @@ class Customer(WarehouseBase, TpchSchemaMixin):
     c_acctbal = sa.Column(sa.Numeric(38, 0))
     c_mktsegment = sa.Column(sa.String)
     c_comment = sa.Column(sa.String)
+    user_id = sa.Column(sa.Integer)
 
 
 class LineItem(WarehouseBase, TpchSchemaMixin):
