@@ -8,7 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.9"
 factory-boy = "^3.2.1"
-snowflake-sqlalchemy = {extras: ["pandas"], version: "^1.7.2"}
+snowflake-sqlalchemy = {extras = ["pandas"], version = "^1.7.2"}
 PyGithub = "^1.55"
 
 [tool.poetry.group.dev.dependencies]
