@@ -9,18 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: "3.9.x"
-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-      
-      - name: Install dependencies
-        run: poetry install --without dev
+          python-version: "3.11"
+      - uses: yezz123/setup-uv@v4
+      - name: Install dbtc
+        run: uv sync
+        env:
+          UV_SYSTEM_PYTHON: 1
 
       - name: Run python script
-        run: poetry run python dbt_faker/main.py
+        run: uv run python dbt_faker/main.py
         env:
           WAREHOUSE_URL: ${{ secrets.WAREHOUSE_URL }}
