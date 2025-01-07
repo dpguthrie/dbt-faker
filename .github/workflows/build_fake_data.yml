@@ -14,7 +14,7 @@ jobs:
           python-version: "3.11"
       - uses: yezz123/setup-uv@v4
       - name: Install deps
-        run: uv pip install numpy && uv sync
+        run: uv sync
         env:
           UV_SYSTEM_PYTHON: 1
 
