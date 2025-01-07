@@ -7,7 +7,6 @@ dependencies = [
     "factory-boy",
     "snowflake-sqlalchemy",
     "PyGithub",
-    "pandas",
 ]
 
 [build-system]
