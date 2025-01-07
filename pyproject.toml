@@ -5,8 +5,9 @@ description = "A tool for generating fake data for dbt projects"
 requires-python = ">=3.9"
 dependencies = [
     "factory-boy>=3.2.1",
-    "snowflake-sqlalchemy[pandas]~=1.4",
-    "PyGithub>=1.55"
+    "snowflake-sqlalchemy~=1.7",
+    "PyGithub>=1.55",
+    "pandas",
 ]
 
 [build-system]
