@@ -13,8 +13,8 @@ jobs:
         with:
           python-version: "3.11"
       - uses: yezz123/setup-uv@v4
-      - name: Install dbtc
-        run: uv sync
+      - name: Install deps
+        run: uv pip install numpy && uv sync
         env:
           UV_SYSTEM_PYTHON: 1
 
